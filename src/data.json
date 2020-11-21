@@ -1,0 +1,16 @@
+{
+  "products": [
+    {
+      "id": 0,
+      "name": "grapefruit",
+      "category": "fruit",
+      "amount": 4
+    },
+    {
+      "id": 1,
+      "name": "passion fruit",
+      "category": "fruit",
+      "amount": 8
+    }
+  ]
+}

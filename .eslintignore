@@ -1,0 +1,5 @@
+# Build directory
+dist
+
+# Eslint config
+.eslintrc.js
