@@ -11,6 +11,7 @@ import builtins from 'builtin-modules'
 import dotenv from 'dotenv'
 import fs from 'fs'
 import path from 'path'
+import tsconfig from './tsconfig.json'
 
 const dotenvVariables = dotenv.parse(fs.readFileSync(path.join(__dirname, '.env')))
 
@@ -34,7 +35,13 @@ try {
 
 const typescriptPluginOptions = { tsconfig: 'tsconfig.rollup.json' }
 
-if (mustMinify) typescriptPluginOptions.target = 'ES2020'
+if (mustMinify) {
+  typescriptPluginOptions.target = (
+    tsconfig.compilerOptions.target !== 'ESNEXT'
+      ? tsconfig.compilerOptions.target
+      : 'ES2020'
+  )
+}
 
 export default {
   input: 'src/index.ts',
