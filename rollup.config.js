@@ -16,10 +16,12 @@ const dotenvVariables = dotenv.parse(fs.readFileSync(path.join(__dirname, '.env'
 
 // prefix dotenv's object keys, with "process.env."
 const envVariables = Object.fromEntries(
-  Object.entries(dotenvVariables).map(([key, value]) => [
-    ['process.env', key].join('.'),
-    JSON.stringify(value)
-  ])
+  Object.entries(dotenvVariables).map(
+    ([key, value]) => [
+      ['process.env', key].join('.'),
+      JSON.stringify(value)
+    ]
+  )
 )
 
 let mustMinify = false
