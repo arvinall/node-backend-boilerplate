@@ -151,9 +151,11 @@ if (module === require.main) {
                 (!fileAddress.includes('.test.') &&
                   isExtInList(fileAddress, ['ts', 'js']))
               ) {
-                const [, tscOnExit] = await spwanHere('compile:tsc', 'npx', [
-                  'tsc'
-                ])
+                const [, tscOnExit] = await spwanHere(
+                  'compile:tsc',
+                  'npx',
+                  ['tsc']
+                )
 
                 await tscOnExit
               }
