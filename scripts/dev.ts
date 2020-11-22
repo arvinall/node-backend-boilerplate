@@ -148,8 +148,7 @@ if (module === require.main) {
             try {
               if (
                 !fileAddress ||
-                (!fileAddress.includes('.test.') &&
-                  isExtInList(fileAddress, ['ts', 'js']))
+                !fileAddress.includes('.test.')
               ) {
                 const [, tscOnExit] = await spwanHere(
                   'compile:tsc',
