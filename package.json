@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "ts-node --project ./tsconfig.scripts.json ./scripts/dev.ts",
     "dev:compile": "ts-node --project ./tsconfig.scripts.json ./scripts/dev.ts --compile",
+    "dev:build": "ts-node --project ./tsconfig.scripts.json ./scripts/dev.ts --build",
     "test": "TS_NODE_PROJECT='./tsconfig.ava.json' ava ./src/**/*.test.*",
     "coverage": "TS_NODE_PROJECT='./tsconfig.ava.json' nyc ava ./src/**/*.test.*",
     "format": "prettier --write ./src && eslint --fix ./src",

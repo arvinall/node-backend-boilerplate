@@ -11,7 +11,7 @@ export interface IProduct {
 }
 
 export function getProducts (): IProduct[] {
-  return data.products
+  return data.products as IProduct[]
 }
 
 console.log('Connecting to %s ...', process.env.DATABASE_URI)

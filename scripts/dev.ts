@@ -41,6 +41,7 @@ export async function spwanHere (
     childProcess,
     new Promise((resolve: Function, reject: Function) =>
       childProcess.on('exit', (code: number) => {
+        console.log('</' + name.split('(')[0] + '>')
         code === 0 ? resolve() : reject()
       })
     )
@@ -62,11 +63,12 @@ if (module === require.main) {
     let lastNodeChildProcess: ChildProcess
     let inProcess = false
 
+    const buildMode: boolean = process.argv.includes('--build')
+    const compileMode: boolean = process.argv.includes('--compile') || buildMode
+
     return async function processes (fileAddress?: string): Promise<void> {
       if (inProcess) return
       else inProcess = true
-
-      let mustRun: Boolean = true
 
       // format:prettier
       try {
@@ -84,8 +86,8 @@ if (module === require.main) {
         }
       } catch (childProcess) {}
 
+      // lint:eslint
       try {
-        // lint:eslint
         if (
           !fileAddress ||
           isExtInList(fileAddress, ['ts', 'js', 'cjs', 'mjs'])
@@ -98,29 +100,27 @@ if (module === require.main) {
 
           await eslintOnExit
         }
+      } catch (childProcess) {}
 
-        // test:ava
-        try {
-          if (
-            !fileAddress ||
-            (fileAddress.includes('.test.') &&
-              isExtInList(fileAddress, ['ts', 'js', 'cjs', 'mjs']))
-          ) {
-            const [, avaOnExit] = await spwanHere(
-              'test:ava' + (fileAddress ? `(${fileAddress})` : ''),
-              'npx',
-              [
-                'ava',
-                fileAddress || path.join(sourceDirectory, './**/*.test.*')
-              ]
-            )
+      // test:ava
+      try {
+        if (
+          !fileAddress ||
+          (fileAddress.includes('.test.') &&
+            isExtInList(fileAddress, ['ts', 'js', 'cjs', 'mjs']))
+        ) {
+          const [, avaOnExit] = await spwanHere(
+            'test:ava' + (fileAddress ? `(${fileAddress})` : ''),
+            'npx',
+            [
+              'ava',
+              fileAddress || path.join(sourceDirectory, './**/*.test.*')
+            ]
+          )
 
-            await avaOnExit
-          }
-        } catch (childProcess) {}
-      } catch (childProcess) {
-        mustRun = false
-      }
+          await avaOnExit
+        }
+      } catch (childProcess) {}
 
       if (!fileAddress || !fileAddress.includes('.test.')) {
         if (
@@ -129,44 +129,44 @@ if (module === require.main) {
           !lastNodeChildProcess.killed
         ) { lastNodeChildProcess.kill() }
 
-        if (mustRun) {
-          if (process.argv.includes('--compile')) {
-            // clean:rimraf
-            try {
-              if (!fileAddress) {
-                const [, rimrafOnExit] = await spwanHere(
-                  'clean:rimraf',
-                  'npx',
-                  ['rimraf', distDirectory]
-                )
+        if (compileMode) {
+          // clean:rimraf
+          try {
+            if (!fileAddress) {
+              const [, rimrafOnExit] = await spwanHere(
+                'clean:rimraf',
+                'npx',
+                ['rimraf', distDirectory]
+              )
 
-                await rimrafOnExit
-              }
-            } catch (error) {}
+              await rimrafOnExit
+            }
+          } catch (childProcess) {}
 
-            // compile:tsc
-            try {
-              if (
-                !fileAddress ||
-                !fileAddress.includes('.test.')
-              ) {
-                const [, tscOnExit] = await spwanHere(
-                  'compile:tsc',
-                  'npx',
-                  ['tsc']
-                )
+          // compile:tsc
+          try {
+            if (
+              !fileAddress ||
+              !fileAddress.includes('.test.')
+            ) {
+              const [, tscOnExit] = await spwanHere(
+                'compile:tsc',
+                'npx',
+                ['tsc']
+              )
 
-                await tscOnExit
-              }
-            } catch (error) {}
-          }
+              await tscOnExit
+            }
+          } catch (childProcess) {}
+        }
 
+        if (!buildMode) {
           // run:node
           try {
             const [nodeChildProcess, nodeOnExit] = await spwanHere(
               'run:node',
               'node',
-              !process.argv.includes('--compile')
+              !compileMode
                 ? [
                   '--inspect', // --inspect-brk
                   '-r',
