@@ -1,5 +1,5 @@
 # Build directory
 dist
 
-# Eslint config
-.eslintrc.js
+# Node modules
+node_modules

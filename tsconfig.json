@@ -3,7 +3,6 @@
     "target": "ESNEXT",
     "module": "commonjs",
     "outDir": "./dist",
-    "rootDir": "./src",
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -21,8 +20,13 @@
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true
   },
+  "include": [
+    "./src"
+  ],
   "exclude": [
-    "./scripts",
-    "./src/**/*.test*"
+    "./script",
+    "./src/tests",
+    "./src/**/tests",
+    "./src/**/**/tests"
   ]
 }
