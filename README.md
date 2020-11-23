@@ -17,6 +17,7 @@ NodeJS backend boilerplate with custom development scripts
 ### npm scripts
 * `dev`
 * `dev:compile`
+* `dev:build`
 * `coverage`
 * `test`
 * `format`
