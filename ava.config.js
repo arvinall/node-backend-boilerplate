@@ -1,8 +1,8 @@
 export default {
   extensions: [
-    "ts"
+    'ts'
   ],
   require: [
-    "ts-node/register"
+    'ts-node/register'
   ]
 }
