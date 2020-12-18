@@ -7,6 +7,7 @@ import replacePlugin from '@rollup/plugin-replace'
 import clearPlugin from 'rollup-plugin-clear'
 import { terser as terserPlugin } from 'rollup-plugin-terser'
 import progressPlugin from 'rollup-plugin-progress'
+import sizesPlugin from 'rollup-plugin-sizes'
 
 import builtins from 'builtin-modules'
 import dotenv from 'dotenv'
@@ -59,7 +60,8 @@ export default {
     nodeResolvePlugin({ preferBuiltins: true }),
     commonjsPlugin(),
     jsonPlugin(),
-    mustMinify ? terserPlugin() : undefined
+    mustMinify ? terserPlugin() : undefined,
+    sizesPlugin()
   ],
   external: builtins
 }
